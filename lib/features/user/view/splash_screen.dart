@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterskills/common/const/data.dart';
 import 'package:flutterskills/common/layout/default_layout.dart';
@@ -23,18 +24,27 @@ class _SplashScreenState extends State<SplashScreen> {
     final accessToken = await storage.read(key: accessTokenKey);
     final refreshToken = await storage.read(key: refreshTokenKey);
 
-    if (refreshToken == null || accessToken == null) {
-      if (!mounted) return;
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => LoginScreen()),
-        (route) => false,
+    final dio = Dio();
+
+    try {
+      final resp = await dio.post(
+        'http://$ip/auth/token',
+        options: Options(headers: {'authorization': 'Bearer $refreshToken'}),
       );
-    } else {
+
+      await storage.write(key: accessTokenKey, value: resp.data['accessToken']);
+
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => RootTab()),
+        (route) => false,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => LoginScreen()),
         (route) => false,
       );
     }

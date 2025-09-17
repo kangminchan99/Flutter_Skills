@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutterskills/features/user/view/login_screen.dart';
 import 'package:flutterskills/features/user/view/splash_screen.dart';
 
 void main() {
