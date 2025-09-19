@@ -1,6 +1,10 @@
-import 'package:flutterskills/common/const/data.dart';
+import 'package:flutterskills/common/utils/data_utils.dart';
 import 'package:flutterskills/features/restaurant/model/restaurant_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'restaurant_detail_model.g.dart';
+
+@JsonSerializable()
 class RestaurantDetailModel extends RestaurantModel {
   final String detail;
   final List<RestaurantProductModel> products;
@@ -18,34 +22,20 @@ class RestaurantDetailModel extends RestaurantModel {
     required super.ratings,
   });
 
-  factory RestaurantDetailModel.fromJson({required Map<String, dynamic> json}) {
-    return RestaurantDetailModel(
-      detail: json['detail'],
-      products: List<RestaurantProductModel>.from(
-        json['products'].map(
-          (item) => RestaurantProductModel.fromJson(json: item),
-        ),
-      ),
-      id: json['id'],
-      name: json['name'],
-      thumbUrl: 'http://$ip${json['thumbUrl']}',
-      tags: List<String>.from(json['tags']),
-      priceRange: RestaurantPriceRange.values.firstWhere(
-        (e) => e.name == json['priceRange'],
-      ),
-      ratingsCount: json['ratingsCount'],
-      deliveryTime: json['deliveryTime'],
-      deliveryFee: json['deliveryFee'],
-      ratings: json['ratings'].toDouble(),
-    );
-  }
+  factory RestaurantDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantDetailModelFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$RestaurantDetailModelToJson(this);
 }
 
+@JsonSerializable()
 class RestaurantProductModel {
   final String id;
   final String name;
   final String detail;
   final int price;
+  @JsonKey(fromJson: DataUtils.pathToUrl)
   final String imgUrl;
 
   RestaurantProductModel({
@@ -56,15 +46,8 @@ class RestaurantProductModel {
     required this.imgUrl,
   });
 
-  factory RestaurantProductModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return RestaurantProductModel(
-      id: json['id'],
-      name: json['name'],
-      detail: json['detail'],
-      price: json['price'],
-      imgUrl: 'http://$ip${json['imgUrl']}',
-    );
-  }
+  factory RestaurantProductModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantProductModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RestaurantProductModelToJson(this);
 }
