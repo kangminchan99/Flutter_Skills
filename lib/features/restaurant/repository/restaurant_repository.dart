@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart' hide Headers;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutterskills/common/const/data.dart';
+import 'package:flutterskills/common/dio/dio_interceptor.dart';
 import 'package:flutterskills/common/model/cursor_pagination_model.dart';
 import 'package:flutterskills/features/restaurant/model/restaurant_detail_model.dart';
 import 'package:flutterskills/features/restaurant/model/restaurant_model.dart';
@@ -24,3 +27,13 @@ abstract class RestaurantRepository {
     @Path() required String id,
   });
 }
+
+final restaurantRepositoryProvider = Provider<RestaurantRepository>((ref) {
+  final dio = ref.watch(dioProvider);
+  final repository = RestaurantRepository(
+    dio,
+    baseUrl: 'http://$ip/restaurant',
+  );
+
+  return repository;
+});
