@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterskills/common/const/data.dart';
+import 'package:flutterskills/common/secure_storage/secure_storage.dart';
 
 class DioInterceptor extends Interceptor {
   final FlutterSecureStorage secureStorage;
@@ -102,3 +104,12 @@ class DioInterceptor extends Interceptor {
     return handler.reject(err);
   }
 }
+
+final dioProvider = Provider((ref) {
+  final dio = Dio();
+  final storage = ref.watch(secureStorageProvider);
+
+  dio.interceptors.add(DioInterceptor(secureStorage: storage));
+
+  return dio;
+});

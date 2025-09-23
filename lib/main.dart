@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutterskills/features/user/view/splash_screen.dart';
 
 void main() {
-  runApp(_App());
+  runApp(const ProviderScope(child: _App()));
 }
 
 class _App extends StatelessWidget {
