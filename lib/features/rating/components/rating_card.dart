@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterskills/common/styles/app_colors.dart';
 // map에서 index를 사용하고 싶을 때
 import 'package:collection/collection.dart';
+import 'package:flutterskills/features/rating/model/rating_model.dart';
 
 class RatingCard extends StatelessWidget {
   // Network image
@@ -26,6 +27,16 @@ class RatingCard extends StatelessWidget {
     required this.content,
   });
 
+  factory RatingCard.fromModel({required RatingModel model}) {
+    return RatingCard(
+      avatarImage: NetworkImage(model.user.imageUrl),
+      images: model.imgUrls.map((e) => Image.network(e)).toList(),
+      rating: model.rating,
+      email: model.user.username,
+      content: model.content,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,8 +44,10 @@ class RatingCard extends StatelessWidget {
         _Header(avatarImage: avatarImage, email: email, rating: rating),
         SizedBox(height: 8),
         _Body(content: content),
-        if (images.isNotEmpty)
-          SizedBox(height: 100, child: _Images(images: images)),
+        if (images.isNotEmpty) ...[
+          SizedBox(height: 8),
+          SizedBox(height: 110, child: _Images(images: images)),
+        ],
       ],
     );
   }

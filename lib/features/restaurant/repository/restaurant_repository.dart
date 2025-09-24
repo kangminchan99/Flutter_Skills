@@ -4,6 +4,7 @@ import 'package:flutterskills/common/const/data.dart';
 import 'package:flutterskills/common/dio/dio_interceptor.dart';
 import 'package:flutterskills/common/model/cursor_pagination_model.dart';
 import 'package:flutterskills/common/model/pagination_params.dart';
+import 'package:flutterskills/common/repository/base_pagination.dart';
 import 'package:flutterskills/features/restaurant/model/restaurant_detail_model.dart';
 import 'package:flutterskills/features/restaurant/model/restaurant_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -11,7 +12,8 @@ import 'package:retrofit/retrofit.dart';
 part 'restaurant_repository.g.dart';
 
 @RestApi()
-abstract class RestaurantRepository {
+abstract class RestaurantRepository
+    implements IBasePaginationRepository<RestaurantModel> {
   // base url = http://$ip/restaurant
   factory RestaurantRepository(Dio dio, {String baseUrl}) =
       _RestaurantRepository;
