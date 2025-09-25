@@ -1,17 +1,13 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutterskills/common/components/custom_text_form_field.dart';
-import 'package:flutterskills/common/const/data.dart';
-import 'package:flutterskills/common/dio/dio_interceptor.dart';
 import 'package:flutterskills/common/layout/default_layout.dart';
-import 'package:flutterskills/common/secure_storage/secure_storage.dart';
 import 'package:flutterskills/common/styles/app_colors.dart';
-import 'package:flutterskills/common/view/root_tab.dart';
+import 'package:flutterskills/features/user/model/user_model.dart';
+import 'package:flutterskills/features/user/provider/user_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'login';
   const LoginScreen({super.key});
 
   @override
@@ -23,7 +19,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   String password = '';
   @override
   Widget build(BuildContext context) {
-    final dio = ref.watch(dioProvider);
+    final state = ref.watch(userProvider);
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -60,42 +56,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () async {
-                    // ID:비밀번호
-                    final rawString = '$username:$password';
-
-                    // String -> base64
-                    Codec<String, String> stringToBase64 = utf8.fuse(base64);
-                    // 인코딩
-                    String token = stringToBase64.encode(rawString);
-
-                    final resp = await dio.post(
-                      'http://$ip/auth/login',
-                      options: Options(
-                        headers: {'authorization': 'Basic $token'},
-                      ),
-                    );
-
-                    final refreshToken = resp.data['refreshToken'];
-                    final accessToken = resp.data['accessToken'];
-
-                    final storage = ref.read(secureStorageProvider);
-
-                    await storage.write(
-                      key: refreshTokenKey,
-                      value: refreshToken,
-                    );
-                    await storage.write(
-                      key: accessTokenKey,
-                      value: accessToken,
-                    );
-
-                    if (!context.mounted) return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => RootTab()),
-                    );
-                  },
+                  onPressed: state is UserModelLoading
+                      ? null
+                      : () async {
+                          ref
+                              .read(userProvider.notifier)
+                              .login(username: username, password: password);
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor,
                   ),

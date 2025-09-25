@@ -3,8 +3,10 @@ import 'package:flutterskills/common/layout/default_layout.dart';
 import 'package:flutterskills/common/styles/app_colors.dart';
 import 'package:flutterskills/features/product/view/product_screen.dart';
 import 'package:flutterskills/features/restaurant/view/restaurant_screen.dart';
+import 'package:flutterskills/features/user/view/profile_screen.dart';
 
 class RootTab extends StatefulWidget {
+  static String get routeName => 'home';
   const RootTab({super.key});
 
   @override
@@ -71,7 +73,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
           RestaurantScreen(),
           ProductScreen(),
           Container(child: Text('order')),
-          Container(child: Text('profile')),
+          ProfileScreen(),
         ],
       ),
     );
