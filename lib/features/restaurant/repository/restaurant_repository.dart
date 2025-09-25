@@ -19,6 +19,7 @@ abstract class RestaurantRepository
       _RestaurantRepository;
 
   // GET http://$ip/restaurant
+  @override
   @GET('/')
   @Headers({'accessToken': 'true'})
   Future<CursorPaginationModel<RestaurantModel>> paginate({

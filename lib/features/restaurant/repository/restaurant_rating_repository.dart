@@ -18,6 +18,7 @@ abstract class RestaurantRatingRepository
   factory RestaurantRatingRepository(Dio dio, {String baseUrl}) =
       _RestaurantRatingRepository;
 
+  @override
   @GET('/')
   @Headers({'accessToken': 'true'})
   Future<CursorPaginationModel<RatingModel>> paginate({
