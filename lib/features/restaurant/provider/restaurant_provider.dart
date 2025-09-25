@@ -3,6 +3,7 @@ import 'package:flutterskills/common/model/cursor_pagination_model.dart';
 import 'package:flutterskills/common/provider/pagination_provider.dart';
 import 'package:flutterskills/features/restaurant/model/restaurant_model.dart';
 import 'package:flutterskills/features/restaurant/repository/restaurant_repository.dart';
+import 'package:collection/collection.dart';
 
 class RestaurantStateNotifier
     extends PaginationProvider<RestaurantModel, RestaurantRepository> {
@@ -25,14 +26,25 @@ class RestaurantStateNotifier
     final response = await repository.getRestaurantDetail(id: id);
 
     // [RestaurantModel(1), RestaurantModel(2), ...]
-    // id : 2인 친구를 Detail모델을 가져와라
-    // getDetail(id:2)
-    // [RestaurantModel(1), RestaurantDetailModel(2), ...]
-    state = pState.copyWith(
-      data: pState.data
-          .map<RestaurantModel>((e) => e.id == id ? response : e)
-          .toList(),
-    );
+    // 요청 id가 10번 이라면
+    // list.where((e) => e.id == 10)) 데이터 X
+    // 데이터가 없을때는 그냥 캐시의 끝에다가 데이터를 추가해버린다
+    // [RestaurantModel(1), RestaurantModel(2), ..., RestaurantDetailModel(10)]
+    if (pState.data.where((e) => e.id == id).isEmpty) {
+      state = pState.copyWith(
+        data: <RestaurantModel>[...pState.data, response],
+      );
+    } else {
+      // [RestaurantModel(1), RestaurantModel(2), ...]
+      // id : 2인 친구를 Detail모델을 가져와라
+      // getDetail(id:2)
+      // [RestaurantModel(1), RestaurantDetailModel(2), ...]
+      state = pState.copyWith(
+        data: pState.data
+            .map<RestaurantModel>((e) => e.id == id ? response : e)
+            .toList(),
+      );
+    }
   }
 }
 
@@ -55,5 +67,6 @@ final restaurantDetailProvider = Provider.family<RestaurantModel?, String>((
     return null;
   }
 
-  return state.data.firstWhere((element) => element.id == id);
+  // firstWhereOrNull -> 데이터가 없으면 null을 리턴
+  return state.data.firstWhereOrNull((element) => element.id == id);
 });
