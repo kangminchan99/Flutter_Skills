@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterskills/common/const/data.dart';
 import 'package:flutterskills/common/secure_storage/secure_storage.dart';
+import 'package:flutterskills/features/user/provider/auth_provider.dart';
 
 class DioInterceptor extends Interceptor {
   final FlutterSecureStorage secureStorage;
+  final Ref ref;
 
-  DioInterceptor({required this.secureStorage});
+  DioInterceptor({required this.secureStorage, required this.ref});
 
   // 1) 요청을 보낼 때
   // 요청이 보내지기 전에 요청의 header에 accessToken : true일 경우
@@ -98,6 +100,7 @@ class DioInterceptor extends Interceptor {
         //
         return handler.resolve(response);
       } on DioException catch (e) {
+        ref.read(authProvider.notifier).logout();
         return handler.reject(e);
       }
     }
@@ -109,7 +112,7 @@ final dioProvider = Provider((ref) {
   final dio = Dio();
   final storage = ref.watch(secureStorageProvider);
 
-  dio.interceptors.add(DioInterceptor(secureStorage: storage));
+  dio.interceptors.add(DioInterceptor(secureStorage: storage, ref: ref));
 
   return dio;
 });
