@@ -2,14 +2,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterskills/common/const/data.dart';
 import 'package:flutterskills/features/user/model/user_model.dart';
+import 'package:flutterskills/features/user/repository/auth_repository.dart';
 import 'package:flutterskills/features/user/repository/user_repository.dart';
 
 class UserStateNotifier extends StateNotifier<UserModelBase?> {
-  final UserRepository repository;
+  final UserRepository userRepository;
+  final AuthRepository authRepository;
   final FlutterSecureStorage storage;
 
-  UserStateNotifier({required this.repository, required this.storage})
-    : super(UserModelLoading()) {
+  UserStateNotifier({
+    required this.userRepository,
+    required this.authRepository,
+    required this.storage,
+  }) : super(UserModelLoading()) {
     // 내 정보 가져오기
     getMe();
   }
@@ -23,8 +28,45 @@ class UserStateNotifier extends StateNotifier<UserModelBase?> {
       return;
     }
 
-    final response = await repository.getMe();
+    final response = await userRepository.getMe();
 
     state = response;
+  }
+
+  Future<UserModelBase> login({
+    required String username,
+    required String password,
+  }) async {
+    try {
+      state = UserModelLoading();
+
+      final response = await authRepository.login(
+        username: username,
+        password: password,
+      );
+
+      await storage.write(key: accessTokenKey, value: response.accessToken);
+      await storage.write(key: refreshTokenKey, value: response.refreshToken);
+
+      final userResponse = await userRepository.getMe();
+
+      state = userResponse;
+
+      return userResponse;
+    } catch (e) {
+      state = UserModelError(errorMsg: '로그인에 실패했습니다 $e');
+
+      return Future.value(state);
+    }
+  }
+
+  logout() async {
+    state = null;
+
+    // 작업이 모두 끝나야 다음으로 넘어감
+    await Future.wait([
+      storage.delete(key: accessTokenKey),
+      storage.delete(key: refreshTokenKey),
+    ]);
   }
 }
