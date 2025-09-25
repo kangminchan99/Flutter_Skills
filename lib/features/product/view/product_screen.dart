@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutterskills/common/components/pagination_listview.dart';
+import 'package:flutterskills/features/product/components/product_card.dart';
+import 'package:flutterskills/features/product/model/product_model.dart';
 import 'package:flutterskills/features/product/provider/product_provider.dart';
 
-class ProductScreen extends ConsumerStatefulWidget {
+class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
 
   @override
-  ConsumerState<ProductScreen> createState() => _ProductScreenState();
-}
-
-class _ProductScreenState extends ConsumerState<ProductScreen> {
-  @override
   Widget build(BuildContext context) {
-    final state = ref.watch(productProvider);
-    return Center(child: Text('Product Tab $state'));
+    return PaginationListview<ProductModel>(
+      provider: productProvider,
+      itemBuilder: <ProductModel>(context, index, model) {
+        return ProductCard.fromProductModel(model: model);
+      },
+    );
   }
 }

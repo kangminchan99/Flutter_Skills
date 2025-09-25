@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterskills/common/styles/app_colors.dart';
+import 'package:flutterskills/features/product/model/product_model.dart';
 import 'package:flutterskills/features/restaurant/model/restaurant_detail_model.dart';
 
 class ProductCard extends StatelessWidget {
@@ -15,7 +16,23 @@ class ProductCard extends StatelessWidget {
     required this.price,
   });
 
-  factory ProductCard.fromModel({required RestaurantProductModel model}) {
+  factory ProductCard.fromProductModel({required ProductModel model}) {
+    return ProductCard(
+      image: Image.network(
+        model.imgUrl,
+        fit: BoxFit.cover,
+        width: 110,
+        height: 110,
+      ),
+      name: model.name,
+      detail: model.detail,
+      price: model.price,
+    );
+  }
+
+  factory ProductCard.fromRestaurantProductModel({
+    required RestaurantProductModel model,
+  }) {
     return ProductCard(
       image: Image.network(
         model.imgUrl,
