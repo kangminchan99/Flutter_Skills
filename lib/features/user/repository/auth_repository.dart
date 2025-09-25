@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutterskills/common/const/data.dart';
+import 'package:flutterskills/common/dio/dio_interceptor.dart';
 import 'package:flutterskills/common/model/login_response.dart';
 import 'package:flutterskills/common/model/token_response.dart';
 import 'package:flutterskills/common/utils/data_utils.dart';
@@ -32,3 +35,9 @@ class AuthRepository {
     return TokenResponse.fromJson(response.data);
   }
 }
+
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final dio = ref.watch(dioProvider);
+
+  return AuthRepository(dio: dio, baseUrl: 'http://$ip/auth');
+});

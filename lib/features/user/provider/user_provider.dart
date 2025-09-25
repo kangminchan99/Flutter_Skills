@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterskills/common/const/data.dart';
+import 'package:flutterskills/common/secure_storage/secure_storage.dart';
 import 'package:flutterskills/features/user/model/user_model.dart';
 import 'package:flutterskills/features/user/repository/auth_repository.dart';
 import 'package:flutterskills/features/user/repository/user_repository.dart';
@@ -70,3 +71,17 @@ class UserStateNotifier extends StateNotifier<UserModelBase?> {
     ]);
   }
 }
+
+final userProvider = StateNotifierProvider<UserStateNotifier, UserModelBase?>((
+  ref,
+) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  final userRepository = ref.watch(userRepositoryProvider);
+  final storage = ref.watch(secureStorageProvider);
+
+  return UserStateNotifier(
+    userRepository: userRepository,
+    authRepository: authRepository,
+    storage: storage,
+  );
+});
