@@ -14,6 +14,8 @@ import 'package:flutterskills/features/restaurant/provider/restaurant_rating_pro
 import 'package:skeletonizer/skeletonizer.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'restaurantDetail';
+
   final String id;
   const RestaurantDetailScreen({super.key, required this.id});
 
