@@ -4,6 +4,7 @@ import 'package:flutterskills/common/const/data.dart';
 import 'package:flutterskills/common/dio/dio_interceptor.dart';
 import 'package:flutterskills/features/order/model/order_model.dart';
 import 'package:flutterskills/features/order/model/post_order_body.dart';
+import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
 part 'order_repository.g.dart';
