@@ -52,3 +52,8 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
     }
   }
 }
+
+final basketProvider =
+    StateNotifierProvider<BasketProvider, List<BasketItemModel>>((ref) {
+      return BasketProvider();
+    });
