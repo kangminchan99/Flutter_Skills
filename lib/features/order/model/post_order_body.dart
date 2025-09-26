@@ -1,4 +1,3 @@
-import 'package:flutterskills/features/user/model/basket_item_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'post_order_body.g.dart';

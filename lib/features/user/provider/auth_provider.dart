@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutterskills/common/view/root_tab.dart';
+import 'package:flutterskills/features/order/view/order_done_screen.dart';
 import 'package:flutterskills/features/restaurant/view/basket_screen.dart';
 import 'package:flutterskills/features/restaurant/view/restaurant_detail_screen.dart';
 import 'package:flutterskills/features/user/model/user_model.dart';
@@ -38,6 +39,11 @@ class AuthProvider extends ChangeNotifier {
       path: '/basket',
       name: BasketScreen.routeName,
       builder: (context, state) => const BasketScreen(),
+    ),
+    GoRoute(
+      path: '/order_done',
+      name: OrderDoneScreen.routeName,
+      builder: (context, state) => const OrderDoneScreen(),
     ),
     GoRoute(
       path: '/splash',
