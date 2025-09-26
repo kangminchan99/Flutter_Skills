@@ -6,7 +6,7 @@ part 'post_order_body.g.dart';
 @JsonSerializable()
 class PostOrderBody {
   final String id;
-  final List<BasketItemModel> products;
+  final List<PostOrderBodyProducts> products;
   final int totalPrice;
   final String createdAt;
 
@@ -21,4 +21,17 @@ class PostOrderBody {
       _$PostOrderBodyFromJson(json);
 
   Map<String, dynamic> toJson() => _$PostOrderBodyToJson(this);
+}
+
+@JsonSerializable()
+class PostOrderBodyProducts {
+  final String productId;
+  final int count;
+
+  PostOrderBodyProducts({required this.productId, required this.count});
+
+  factory PostOrderBodyProducts.fromJson(Map<String, dynamic> json) =>
+      _$PostOrderBodyProductsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PostOrderBodyProductsToJson(this);
 }
