@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutterskills/common/const/data.dart';
 
 class DataUtils {
+  static DateTime stringToDateTime(String date) => DateTime.parse(date);
+
   static String pathToUrl(String path) => 'http://$ip$path';
 
   static List<String> listPathToUrl(List paths) {
