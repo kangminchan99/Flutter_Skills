@@ -13,7 +13,9 @@ import 'package:flutterskills/features/restaurant/model/restaurant_detail_model.
 import 'package:flutterskills/features/restaurant/model/restaurant_model.dart';
 import 'package:flutterskills/features/restaurant/provider/restaurant_provider.dart';
 import 'package:flutterskills/features/restaurant/provider/restaurant_rating_provider.dart';
+import 'package:flutterskills/features/restaurant/view/basket_screen.dart';
 import 'package:flutterskills/features/user/provider/basket_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -64,7 +66,9 @@ class _RestaurantDetailScreenState
       floactingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primaryColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-        onPressed: () {},
+        onPressed: () {
+          context.pushNamed(BasketScreen.routeName);
+        },
         child: badges.Badge(
           showBadge: basket.isNotEmpty,
           badgeContent: Text(
